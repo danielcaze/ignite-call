@@ -9,7 +9,7 @@ import {
   TextInput,
 } from '@ignite-ui/react'
 import { ArrowRight } from 'phosphor-react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Container, Header } from '../styles'
 import {
@@ -28,6 +28,7 @@ export default function TimeIntervals() {
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { isSubmitting, errors },
   } = useForm<timeIntervalsFormType>({
@@ -46,7 +47,8 @@ export default function TimeIntervals() {
   })
 
   const weekDays = getWeekDays()
-
+  const intervals = watch('intervals')
+  console.log(intervals)
   const { fields } = useFieldArray({ name: 'intervals', control })
 
   function handleSetTimeIntervals(data: timeIntervalsFormType) { }
@@ -71,7 +73,20 @@ export default function TimeIntervals() {
             return (
               <IntervalItem key={field.id}>
                 <IntervalDay>
-                  <Checkbox />
+                  <Controller
+                    control={control}
+                    name={`intervals[${index}].enabled`}
+                    render={({ field }) => {
+                      return (
+                        <Checkbox
+                          onCheckedChange={(checked) => {
+                            field.onChange(checked === true)
+                          }}
+                          checked={field.value}
+                        />
+                      )
+                    }}
+                  />
                   <Text>{weekDays[field.weekDay]}</Text>
                 </IntervalDay>
                 <IntervalInputs>
@@ -79,12 +94,14 @@ export default function TimeIntervals() {
                     size="sm"
                     type="time"
                     step={60}
+                    disabled={intervals[index].enabled === false}
                     {...register(`intervals[${index}].startTime`)}
                   />
                   <TextInput
                     size="sm"
                     type="time"
                     step={60}
+                    disabled={intervals[index].enabled === false}
                     {...register(`intervals[${index}].endTime`)}
                   />
                 </IntervalInputs>
