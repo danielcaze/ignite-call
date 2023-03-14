@@ -1,4 +1,4 @@
-import { getWeekDays } from '@/utils'
+import { convertTimeStringToMinutes, getWeekDays } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Button,
@@ -35,10 +35,31 @@ const timeIntervalsFormSchema = z.object({
     .transform((intervals) => intervals.filter((interval) => interval.enabled))
     .refine((intervals) => intervals.length > 0, {
       message: 'Você precisa selecionar pelo menos um dia da semana!',
-    }),
+    })
+    .transform((intervals) => {
+      return intervals.map((interval) => {
+        return {
+          weekDay: interval.weekDay,
+          startTimeInMinutes: convertTimeStringToMinutes(interval.startTime),
+          endTimeInMinutes: convertTimeStringToMinutes(interval.endTime),
+        }
+      })
+    })
+    .refine(
+      (intervals) => {
+        return intervals.every((interval) => {
+          return interval.endTimeInMinutes - 60 >= interval.startTimeInMinutes
+        })
+      },
+      {
+        message:
+          'O horário de término deve ser pelo menos 1h distante do início.',
+      },
+    ),
 })
 
-type TimeIntervalsFormData = z.infer<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
+type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export default function TimeIntervals() {
   const {
@@ -47,7 +68,7 @@ export default function TimeIntervals() {
     watch,
     control,
     formState: { isSubmitting, errors },
-  } = useForm<TimeIntervalsFormData>({
+  } = useForm<TimeIntervalsFormInput>({
     resolver: zodResolver(timeIntervalsFormSchema),
     defaultValues: {
       intervals: [
@@ -67,8 +88,9 @@ export default function TimeIntervals() {
 
   const { fields } = useFieldArray({ name: 'intervals', control })
 
-  function handleSetTimeIntervals(data: TimeIntervalsFormData) {
-    console.log(data)
+  function handleSetTimeIntervals(data: any) {
+    const formData = data as TimeIntervalsFormOutput
+    console.log(formData)
   }
 
   return (
