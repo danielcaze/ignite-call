@@ -46,7 +46,7 @@ export const TimePickerHeader = styled(Text, {
 
 export const TimePickerList = styled("div", {
   marginTop: "$3",
-  display: "$grid",
+  display: "grid",
   gridTemplateColumns: "1fr",
   top: "$2",
 
