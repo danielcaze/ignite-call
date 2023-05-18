@@ -42,7 +42,7 @@ export default function UpdateProfile() {
       await api.put("/users/profile", {
         bio: data.bio,
       });
-      await router.push(`schedule/${session.data?.user.username}`);
+      await router.push(`/schedule/${session.data?.user.username}`);
     } catch (error) {
       console.error(error);
     }

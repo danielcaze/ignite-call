@@ -48,7 +48,7 @@ export const TimePickerList = styled("div", {
   marginTop: "$3",
   display: "grid",
   gridTemplateColumns: "1fr",
-  top: "$2",
+  gap: "$2",
 
   "@media(max-width: 900px)": {
     gridTemplateColumns: "2fr",
