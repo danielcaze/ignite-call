@@ -55,7 +55,7 @@ export default async function handle(
 
   const possibleTimes = Array.from({ length: endHour - startHour }).map(
     (_, i) => {
-      return startHour + 1;
+      return startHour + i;
     }
   );
 
