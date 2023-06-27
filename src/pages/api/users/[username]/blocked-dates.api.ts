@@ -13,7 +13,7 @@ export default async function handle(
   const { year, month } = req.query;
 
   if (!year || !month) {
-    return res.status(400).json({ message: "Year or monthy not provided." });
+    return res.status(400).json({ message: "Year or month not provided." });
   }
 
   const user = await prisma.user.findUnique({
