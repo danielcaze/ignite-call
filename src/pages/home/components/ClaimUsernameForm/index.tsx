@@ -1,22 +1,22 @@
-import { Button, Text, TextInput } from '@ignite-ui/react'
-import { ArrowRight } from 'phosphor-react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Form, FormAnnotation } from './styles'
-import { useRouter } from 'next/router'
+import { Button, Text, TextInput } from "@ignite-ui/react";
+import { ArrowRight } from "phosphor-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormAnnotation } from "./styles";
+import { useRouter } from "next/router";
 
 const claimUsernameFormSchema = z.object({
   username: z
     .string()
-    .min(3, { message: 'Usuário precisa ter pelo menos 3 letras.' })
+    .min(3, { message: "Usuário precisa ter pelo menos 3 letras." })
     .regex(/^([a-z\\-]+)$/i, {
-      message: 'Usuário pode ter apenas letras e hifens.',
+      message: "Usuário pode ter apenas letras e hifens.",
     })
     .transform((username) => username.toLowerCase()),
-})
+});
 
-type claimUsernameFormType = z.infer<typeof claimUsernameFormSchema>
+type claimUsernameFormType = z.infer<typeof claimUsernameFormSchema>;
 
 export function ClaimUsernameForm() {
   const {
@@ -25,11 +25,11 @@ export function ClaimUsernameForm() {
     formState: { errors, isSubmitting },
   } = useForm<claimUsernameFormType>({
     resolver: zodResolver(claimUsernameFormSchema),
-  })
-  const router = useRouter()
+  });
+  const router = useRouter();
 
   async function handleClaimUsername({ username }: claimUsernameFormType) {
-    await router.push(`/register?username=${username}`)
+    await router.push(`/register?username=${username}`);
   }
 
   return (
@@ -39,7 +39,7 @@ export function ClaimUsernameForm() {
           size="sm"
           prefix="ignite.com/"
           placeholder="seu-usuário"
-          {...register('username')}
+          {...register("username")}
         />
         <Button size="sm" type="submit" disabled={isSubmitting}>
           Reservar
@@ -48,9 +48,9 @@ export function ClaimUsernameForm() {
       </Form>
       <FormAnnotation>
         <Text size="sm">
-          {errors.username?.message ?? 'Digite o nome do usuário desejado.'}
+          {errors.username?.message ?? "Digite o nome do usuário desejado."}
         </Text>
       </FormAnnotation>
     </>
-  )
+  );
 }
