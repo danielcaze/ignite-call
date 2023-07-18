@@ -44,6 +44,7 @@ export function ConfirmStep({
       email,
       name,
       observations,
+      date: schedulingDate,
     });
     onCancelConfirmation();
   }

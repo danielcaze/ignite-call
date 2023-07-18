@@ -58,7 +58,7 @@ export function Calendar({ onDateSelected, selectedDate }: CalendarProps) {
       return response.data;
     }
   );
-  console.log(blockedDates);
+
   const calendarWeeks = useMemo(() => {
     if (!blockedDates) {
       return [];
